@@ -1,0 +1,89 @@
+# Default configuration for GitHub SBOM Consolidator
+
+github:
+  # GitHub API configuration
+  api_base_url: "https://api.github.com"
+  # Access token should be provided via environment variable GITHUB_TOKEN
+  access_token: ${GITHUB_TOKEN}
+  # Request timeout in seconds
+  timeout: 30
+  # Maximum retries for failed requests
+  max_retries: 3
+
+output:
+  # Supported formats: spdx, cyclonedx, json
+  format: 
+    - "spdx"
+    - "cyclonedx"
+  # Output directory for generated SBOMs
+  directory: "./sboms"
+  # Filename for consolidated SBOM (without extension)
+  consolidated_filename: "consolidated-sbom"
+  # Include timestamp in filenames
+  include_timestamp: true
+
+scanning:
+  # Supported programming languages
+  supported_languages:
+    - "javascript"
+    - "python" 
+    - "java"
+    - "csharp"
+  # Include development dependencies in SBOMs
+  include_dev_dependencies: false
+  # Enable vulnerability checking
+  vulnerability_check: true
+  # Enable license detection
+  license_detection: true
+  # Maximum depth for dependency scanning
+  max_scan_depth: 10
+
+logging:
+  # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  # Log file path (optional, logs to console if not specified)
+  file: "sbom-generator.log"
+  # Log format string
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  # Maximum log file size in MB
+  max_file_size: 10
+  # Number of backup log files to keep
+  backup_count: 5
+
+vulnerability:
+  # Vulnerability database URLs
+  databases:
+    - "https://osv.dev"
+    - "https://nvd.nist.gov"
+  # Cache vulnerability data locally
+  enable_cache: true
+  # Cache expiry time in hours
+  cache_expiry: 24
+
+consolidation:
+  # Strategy for handling duplicate components: merge, keep_first, keep_all
+  duplicate_strategy: "merge"
+  # Preserve source repository information
+  preserve_source_info: true
+  # Generate statistics report
+  generate_statistics: true
+
+aws:
+  # AWS region for Bedrock services
+  region: "us-east-1"
+  # AWS credentials (use environment variables or IAM roles)
+  # AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY should be set as env vars
+  
+bedrock:
+  # Enable AI-powered risk analysis
+  enable_risk_analysis: true
+  # Enable automated security recommendations
+  enable_security_recommendations: true
+  # Foundation model for risk analysis
+  risk_analysis_model: "anthropic.claude-3-sonnet-20240229-v1:0"
+  # Foundation model for security recommendations
+  security_advisor_model: "anthropic.claude-3-sonnet-20240229-v1:0"
+  # Maximum tokens for AI responses
+  max_tokens: 4000
+  # Temperature for AI responses (0.0 = deterministic, 1.0 = creative)
+  temperature: 0.1

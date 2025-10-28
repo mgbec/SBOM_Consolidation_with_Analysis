@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  sbom-consolidator:
+    build: .
+    container_name: github-sbom-consolidator
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./output:/app/output
+      - ./config:/app/config
+    working_dir: /app
+    command: ["generate", "--help"]
+
+  # Development service with mounted source code
+  sbom-consolidator-dev:
+    build: .
+    container_name: github-sbom-consolidator-dev
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - .:/app
+      - ./output:/app/output
+    working_dir: /app
+    command: ["tail", "-f", "/dev/null"]  # Keep container running for development
