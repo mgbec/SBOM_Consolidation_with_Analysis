@@ -1,4 +1,4 @@
- """
+"""
 Configuration management for the SBOM consolidator system.
 """
 
@@ -22,3 +22,4 @@ __all__ = [
     "get_config_manager",
     "get_config"
 ]
+
